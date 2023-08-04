@@ -19,7 +19,10 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  getUsers(@Query('limit') limit = 10, @Query('offset') offset = 0) {
+  getUsers(
+    @Query('limit', ParseIntPipe) limit = 10,
+    @Query('offset', ParseIntPipe) offset = 0,
+  ) {
     return {
       data: this.productsService.findAll(),
       limit: limit,
@@ -41,8 +44,11 @@ export class ProductsController {
   }
 
   @Put(':userId')
-  update(@Param('userId') userId: string, @Body() payload: UpdateProductDto) {
-    return this.productsService.update(+userId, payload);
+  update(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Body() payload: UpdateProductDto,
+  ) {
+    return this.productsService.update(userId, payload);
   }
 
   @Delete(':userId')

@@ -9,17 +9,21 @@ import {
   Delete,
   HttpStatus,
   HttpCode,
+  ParseIntPipe,
 } from '@nestjs/common';
 
 @Controller('users')
 export class UsersController {
   @Get()
-  getUsers(@Query('limit') limit = 10, @Query('offset') offset = 0) {
+  getUsers(
+    @Query('limit', ParseIntPipe) limit = 10,
+    @Query('offset', ParseIntPipe) offset = 0,
+  ) {
     return `All users with limit = ${limit}, offset = ${offset}`;
   }
 
   @Get(':userId')
-  getUser(@Param('userId') userId: string) {
+  getUser(@Param('userId', ParseIntPipe) userId: number) {
     return `this user is ${userId}`;
   }
 
