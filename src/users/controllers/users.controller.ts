@@ -11,15 +11,22 @@ import {
   HttpCode,
   ParseIntPipe,
 } from '@nestjs/common';
+import { UsersService } from '../services/users.service';
 
 @Controller('users')
 export class UsersController {
+  constructor(private usersService: UsersService) {}
+
   @Get()
   getUsers(
     @Query('limit', ParseIntPipe) limit = 10,
     @Query('offset', ParseIntPipe) offset = 0,
   ) {
-    return `All users with limit = ${limit}, offset = ${offset}`;
+    return {
+      data: this.usersService.findAll(),
+      limit,
+      offset,
+    };
   }
 
   @Get(':userId')
