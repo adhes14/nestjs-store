@@ -5,12 +5,14 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
 
+import { environments } from './environments';
+
 @Module({
   imports: [
     UsersModule,
     ProductsModule,
     ConfigModule.forRoot({
-      envFilePath: '.env',
+      envFilePath: environments[process.env.NODE_ENV] ?? '.env',
       isGlobal: true,
     }),
   ],
