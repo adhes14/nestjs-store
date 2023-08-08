@@ -5,11 +5,12 @@ import {
   IsUrl,
   IsPositive,
 } from 'class-validator';
-import { PartialType, OmitType } from '@nestjs/swagger';
+import { PartialType, OmitType, ApiProperty } from '@nestjs/swagger';
 
 export class CreateProductDto {
   @IsNotEmpty()
   @IsString()
+  @ApiProperty({ description: 'Product name' })
   readonly name: string;
 
   @IsNotEmpty()

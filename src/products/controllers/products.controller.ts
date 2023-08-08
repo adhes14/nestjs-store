@@ -13,13 +13,16 @@ import {
 } from '@nestjs/common';
 import { ProductsService } from '../services/products.service';
 import { CreateProductDto, UpdateProductDto } from '../dtos/products.dtos';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
+@ApiTags('Products')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  @ApiOperation({ summary: 'Get all products' })
   @Get()
-  getUsers(
+  getProducts(
     @Query('limit', ParseIntPipe) limit = 10,
     @Query('offset', ParseIntPipe) offset = 0,
   ) {
@@ -31,7 +34,7 @@ export class ProductsController {
   }
 
   @Get(':userId')
-  getUser(@Param('userId', ParseIntPipe) userId: number) {
+  getProduct(@Param('userId', ParseIntPipe) userId: number) {
     return {
       data: this.productsService.findOne(userId),
     };
@@ -39,7 +42,7 @@ export class ProductsController {
 
   @Post()
   @HttpCode(HttpStatus.ACCEPTED)
-  createUser(@Body() payload: CreateProductDto) {
+  createProduct(@Body() payload: CreateProductDto) {
     return this.productsService.create(payload);
   }
 
