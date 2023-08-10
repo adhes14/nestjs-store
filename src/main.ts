@@ -22,6 +22,6 @@ async function bootstrap() {
 
   app.enableCors(); // open API to the world
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
