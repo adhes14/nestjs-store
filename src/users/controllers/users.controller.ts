@@ -19,12 +19,12 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get()
-  getUsers(
+  async getUsers(
     @Query('limit', ParseIntPipe) limit = 10,
     @Query('offset', ParseIntPipe) offset = 0,
   ) {
     return {
-      data: this.usersService.findAll(),
+      data: await this.usersService.findAll(),
       limit,
       offset,
     };
@@ -42,10 +42,10 @@ export class UsersController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  createUser(@Body() payload: CreateUserDto) {
+  async createUser(@Body() payload: CreateUserDto) {
     return {
       message: 'User created',
-      data: this.usersService.create(payload),
+      data: await this.usersService.create(payload),
     };
   }
 

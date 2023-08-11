@@ -33,9 +33,9 @@ export class ProductsController {
     };
   }
 
-  @Get(':userId')
-  getProduct(@Param('userId', ParseIntPipe) userId: number) {
-    return this.productsService.findOne(userId);
+  @Get(':productId')
+  getProduct(@Param('productId', ParseIntPipe) productId: number) {
+    return this.productsService.findOne(productId);
   }
 
   @Post()
@@ -44,16 +44,16 @@ export class ProductsController {
     return this.productsService.create(payload);
   }
 
-  @Put(':userId')
+  @Put(':productId')
   update(
-    @Param('userId', ParseIntPipe) userId: number,
+    @Param('productId', ParseIntPipe) productId: number,
     @Body() payload: UpdateProductDto,
   ) {
-    return this.productsService.update(userId, payload);
+    return this.productsService.update(productId, payload);
   }
 
-  @Delete(':userId')
-  delete(@Param('userId', ParseIntPipe) userId: number) {
-    return this.productsService.delete(userId);
+  @Delete(':productId')
+  delete(@Param('productId', ParseIntPipe) productId: number) {
+    return this.productsService.delete(productId);
   }
 }
