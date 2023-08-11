@@ -22,12 +22,12 @@ export class ProductsController {
 
   @ApiOperation({ summary: 'Get all products' })
   @Get()
-  getProducts(
+  async getProducts(
     @Query('limit', ParseIntPipe) limit = 10,
     @Query('offset', ParseIntPipe) offset = 0,
   ) {
     return {
-      data: this.productsService.findAll(),
+      data: await this.productsService.findAll(),
       limit: limit,
       offset: offset,
     };
@@ -35,9 +35,7 @@ export class ProductsController {
 
   @Get(':userId')
   getProduct(@Param('userId', ParseIntPipe) userId: number) {
-    return {
-      data: this.productsService.findOne(userId),
-    };
+    return this.productsService.findOne(userId);
   }
 
   @Post()
