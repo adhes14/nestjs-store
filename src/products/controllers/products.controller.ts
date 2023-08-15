@@ -52,8 +52,24 @@ export class ProductsController {
     return this.productsService.update(productId, payload);
   }
 
+  @Put(':productId/category/:categoryId')
+  addCategory(
+    @Param('productId', ParseIntPipe) productId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+  ) {
+    return this.productsService.addCategoryToProduct(productId, categoryId);
+  }
+
   @Delete(':productId')
   delete(@Param('productId', ParseIntPipe) productId: number) {
     return this.productsService.delete(productId);
+  }
+
+  @Delete(':productId/category/:categoryId')
+  removeCategory(
+    @Param('productId', ParseIntPipe) productId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+  ) {
+    return this.productsService.removeCategoryByProduct(productId, categoryId);
   }
 }
