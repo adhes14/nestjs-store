@@ -6,8 +6,10 @@ import {
   UpdateDateColumn,
   OneToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { User } from './user.entity';
+import { Order } from './order.entity';
 
 @Entity()
 export class Customer {
@@ -38,4 +40,7 @@ export class Customer {
   @OneToOne(() => User, (user) => user.customer)
   @JoinColumn()
   user: User;
+
+  @OneToMany(() => Order, (order) => order.customer, { nullable: true })
+  orders: Order[];
 }
