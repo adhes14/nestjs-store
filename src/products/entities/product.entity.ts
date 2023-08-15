@@ -47,7 +47,9 @@ export class Product {
   @ManyToOne(() => Brand, (brand) => brand.products)
   brand: Brand;
 
-  @ManyToMany(() => Category, (category) => category.products)
+  @ManyToMany(() => Category, (category) => category.products, {
+    nullable: true,
+  })
   @JoinTable()
   categories: Category[];
 }

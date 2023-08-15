@@ -14,8 +14,10 @@ export class CategoriesService {
     return this.categoryRepo.find();
   }
 
-  findOne(id: number) {
-    const category = this.categoryRepo.findOne(id);
+  async findOne(id: number) {
+    const category = await this.categoryRepo.findOne(id, {
+      relations: ['products'],
+    });
     if (!category) throw new NotFoundException(`Category #${id} not found`);
     return category;
   }

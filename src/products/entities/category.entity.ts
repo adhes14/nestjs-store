@@ -29,6 +29,8 @@ export class Category {
   })
   updatedAt: Date;
 
-  @ManyToMany(() => Product, (product) => product.categories)
+  @ManyToMany(() => Product, (product) => product.categories, {
+    nullable: true,
+  })
   products: Product[];
 }
