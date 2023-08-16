@@ -9,6 +9,9 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true, // Ignore data which is not in the DTO
       forbidNonWhitelisted: true, // Thrown errors on unexistent data
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
 
