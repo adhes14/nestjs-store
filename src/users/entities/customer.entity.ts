@@ -38,7 +38,7 @@ export class Customer {
   updatedAt: Date;
 
   @OneToOne(() => User, (user) => user.customer)
-  @JoinColumn()
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
   @OneToMany(() => Order, (order) => order.customer, { nullable: true })
