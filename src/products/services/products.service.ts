@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, FindConditions, Repository } from 'typeorm';
+import { Between, FindOptionsWhere, In, Repository } from 'typeorm';
 
 import { Product } from './../entities/product.entity';
 import {
@@ -21,7 +21,7 @@ export class ProductsService {
 
   findAll(params?: FilterProductDto) {
     if (params) {
-      const where: FindConditions<Product> = {};
+      const where: FindOptionsWhere<Product> = {};
       const { limit, offset, minPrice, maxPrice } = params;
       if (minPrice && maxPrice) {
         where.price = Between(minPrice, maxPrice);
@@ -39,7 +39,8 @@ export class ProductsService {
   }
 
   async findOne(id: number) {
-    const product = await this.productRepo.findOne(id, {
+    const product = await this.productRepo.findOne({
+      where: { id },
       relations: ['brand', 'categories'],
     });
     if (!product) throw new NotFoundException(`Product #${id} not found`);
@@ -55,10 +56,14 @@ export class ProductsService {
     // newProduct.stock = payload.stock;
 
     const newProduct = this.productRepo.create(payload);
-    const brand = await this.brandRepo.findOne(payload.brandId);
+    const brand = await this.brandRepo.findOne({
+      where: { id: payload.brandId },
+    });
     newProduct.brand = brand;
     if (payload.categoryIds) {
-      const categories = await this.categoryRepo.findByIds(payload.categoryIds);
+      const categories = await this.categoryRepo.findBy({
+        id: In(payload.categoryIds),
+      });
       newProduct.categories = categories;
     }
     return this.productRepo.save(newProduct);
@@ -67,7 +72,9 @@ export class ProductsService {
   async update(id: number, payload: UpdateProductDto) {
     const product = await this.findOne(id);
     if (payload.brandId) {
-      const brand = await this.brandRepo.findOne(payload.brandId);
+      const brand = await this.brandRepo.findOne({
+        where: { id: payload.brandId },
+      });
       product.brand = brand;
     }
     this.productRepo.merge(product, payload);
@@ -88,7 +95,9 @@ export class ProductsService {
 
   async addCategoryToProduct(productId: number, categoryId: number) {
     const product = await this.findOne(productId);
-    const category = await this.categoryRepo.findOne(categoryId);
+    const category = await this.categoryRepo.findOne({
+      where: { id: categoryId },
+    });
     product.categories.push(category);
     return this.productRepo.save(product);
   }

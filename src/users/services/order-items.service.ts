@@ -21,7 +21,8 @@ export class OrderItemsService {
   }
 
   async findOne(id: number) {
-    const orderitem = await this.orderItemRepo.findOne(id, {
+    const orderitem = await this.orderItemRepo.findOne({
+      where: { id },
       relations: ['product', 'order'],
     });
     if (!orderitem) throw new NotFoundException(`Order Item #${id} not found`);
@@ -30,8 +31,12 @@ export class OrderItemsService {
 
   async create(payload: CreateOrderItemDto) {
     const newOrderItem = this.orderItemRepo.create(payload);
-    const product = await this.productRepo.findOne(payload.productId);
-    const order = await this.orderRepo.findOne(payload.orderId);
+    const product = await this.productRepo.findOne({
+      where: { id: payload.productId },
+    });
+    const order = await this.orderRepo.findOne({
+      where: { id: payload.orderId },
+    });
     newOrderItem.product = product;
     newOrderItem.order = order;
     return this.orderItemRepo.save(newOrderItem);
@@ -40,11 +45,15 @@ export class OrderItemsService {
   async update(id: number, changes: UpdateOrderItemDto) {
     const orderItem = await this.findOne(id);
     if (!changes.productId) {
-      const product = await this.productRepo.findOne(changes.productId);
+      const product = await this.productRepo.findOne({
+        where: { id: changes.productId },
+      });
       orderItem.product = product;
     }
     if (!changes.orderId) {
-      const order = await this.orderRepo.findOne(id);
+      const order = await this.orderRepo.findOne({
+        where: { id },
+      });
       orderItem.order = order;
     }
     return this.orderItemRepo.save(orderItem);

@@ -4,14 +4,10 @@ import { Repository } from 'typeorm';
 
 import { User } from '../entities/user.entity';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
-import { ProductsService } from '../../products/services/products.service';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    private productsService: ProductsService,
-    @InjectRepository(User) private userRepo: Repository<User>,
-  ) {}
+  constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
 
   findAll() {
     return this.userRepo.find({
@@ -20,7 +16,9 @@ export class UsersService {
   }
 
   async findOne(id: number) {
-    const user = await this.userRepo.findOne(id);
+    const user = await this.userRepo.findOne({
+      where: { id },
+    });
     if (!user) throw new NotFoundException(`User #${id} not found`);
     return user;
   }
