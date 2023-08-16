@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 
 import { User } from '../entities/user.entity';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
-import { Order } from '../entities/order.entity';
 import { ProductsService } from '../../products/services/products.service';
 
 @Injectable()
@@ -39,14 +38,5 @@ export class UsersService {
 
   remove(id: number) {
     return this.userRepo.delete(id);
-  }
-
-  async getOrderByUser(id: number): Promise<Order> {
-    const user = await this.findOne(id);
-    return {
-      date: new Date(),
-      user,
-      products: await this.productsService.findAll(),
-    };
   }
 }
