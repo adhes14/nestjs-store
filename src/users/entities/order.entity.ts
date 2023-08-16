@@ -10,6 +10,7 @@ import {
 
 import { Customer } from './customer.entity';
 import { OrderItem } from './order-item.entity';
+import { Exclude, Expose } from 'class-transformer';
 
 @Entity()
 export class Order {
@@ -37,6 +38,33 @@ export class Order {
   @ManyToOne(() => Customer, (customer) => customer.orders)
   customer: Customer;
 
+  @Exclude()
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
   orderItems: OrderItem[];
+
+  @Expose()
+  get products() {
+    if (this.orderItems) {
+      return this.orderItems
+        .filter((item) => !!item)
+        .map((item) => ({
+          ...item.product,
+          quantity: item.quantity,
+        }));
+    }
+    return [];
+  }
+
+  @Expose()
+  get total() {
+    if (this.orderItems) {
+      return this.orderItems
+        .filter((item) => !!item)
+        .reduce((total, item) => {
+          const costItem = item.product.price * item.quantity;
+          return total + costItem;
+        }, 0);
+    }
+    return 0;
+  }
 }
