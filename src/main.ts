@@ -18,8 +18,8 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   const config = new DocumentBuilder()
-    .setTitle('Platzi store API')
-    .setDescription('The Platzi Store API description')
+    .setTitle('NestJS store API')
+    .setDescription('The NestJS Store API description')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
