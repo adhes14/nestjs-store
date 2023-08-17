@@ -19,20 +19,23 @@ import {
   UpdateProductDto,
 } from '../dtos/products.dtos';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { Public } from '../../auth/decorators/public.decorator';
 
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(JwtAuthGuard)
 @ApiTags('Products')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  @Public()
   @ApiOperation({ summary: 'Get all products' })
   @Get()
   getProducts(@Query() params: FilterProductDto) {
     return this.productsService.findAll(params);
   }
 
+  @Public()
   @Get(':productId')
   getProduct(@Param('productId', ParseIntPipe) productId: number) {
     return this.productsService.findOne(productId);
