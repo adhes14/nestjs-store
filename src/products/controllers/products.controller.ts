@@ -21,8 +21,11 @@ import {
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { Public } from '../../auth/decorators/public.decorator';
+import { Roles } from '../../auth/decorators/roles.decorator';
+import { Role } from '../../auth/models/roles.model';
+import { RolesGuard } from '../../auth/guards/roles.guard';
 
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @ApiTags('Products')
 @Controller('products')
 export class ProductsController {
@@ -35,12 +38,12 @@ export class ProductsController {
     return this.productsService.findAll(params);
   }
 
-  @Public()
   @Get(':productId')
   getProduct(@Param('productId', ParseIntPipe) productId: number) {
     return this.productsService.findOne(productId);
   }
 
+  @Roles(Role.ADMIN)
   @Post()
   @HttpCode(HttpStatus.ACCEPTED)
   createProduct(@Body() payload: CreateProductDto) {
