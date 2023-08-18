@@ -6,5 +6,9 @@ export default registerAs('config', () => {
       url: process.env.DATABASE_URL,
     },
     jwtSecret: process.env.JWT_SECRET,
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      secret: process.env.GOOGLE_SECRET,
+    },
   };
 });
